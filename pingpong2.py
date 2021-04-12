@@ -26,6 +26,7 @@ class Ball():
     def update(self):
         self.x = self.x + self.dx
         self.y = self.y + self.dy
+        
 
 class Bar():
     def __init__(self,x,y,color,width,height,dx,dy,dir):
@@ -43,11 +44,18 @@ class Bar():
     def update(self,dir):
         pass
 
+def redrawindow():
+    win.fill((0,0,0))
+    ball.update()
+    ball.draw(win)
+    pygame.display.update()
+
 def initialize_game():
     global ball,handleleft,handleright
     win.fill((0,0,0))
-    ball = Ball(int(WIDTH/2),int(HEIGHT/2),20,(147,7,246),4,4)
-    hanfleleft = Bar(0,200,(40,222,60),20,200,10,3,0)
+    ball = Ball(int(WIDTH/2),int(HEIGHT/2),20,(147,7,246),14,14)
+    ball.draw(win)
+    handleleft = Bar(0,200,(40,222,60),20,200,10,3,0)
     handleright = Bar(int(WIDTH-20),200,(100,28,60),20,200,10,3,0)
     handleleft.draw(win)
     handleright.draw(win)
@@ -59,15 +67,20 @@ play_but = pygame.transform.scale(pygame.image.load('play.png'),(146,147))
 score_but = pygame.transform.scale(pygame.image.load('score.png'),(146,147))
 ctrl_but = pygame.transform.scale(pygame.image.load('controls.png'),(146,147))
 
+space = False
 play_start =False
 while run:
-    win.fill((0,0,0)) 
-    win.blit(front_img,(180,50))
-    win.blit(play_but,(180,270))
-    win.blit(score_but,(330,270))
-    win.blit(ctrl_but,(480,270))
-    pygame.display.update()
-
+    if not play_start:
+        win.fill((0,0,0)) 
+        win.blit(front_img,(180,50))
+        win.blit(play_but,(180,270))
+        win.blit(score_but,(330,270))
+        win.blit(ctrl_but,(480,270))
+        pygame.display.update()
+    else:
+        if not space:
+            initialize_game()
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
            run = False
@@ -77,7 +90,7 @@ while run:
                 y = pygame.mouse.get_pos()[1]
                 if x>=180 and x<=326 and y>=270 and y<=417:
                     play_start = True
-            pygame.mixer.music.play(-1)
+                    pygame.mixer.music.play(-1)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 #move the left bar up
@@ -96,7 +109,8 @@ while run:
             if event.key == pygame.K_r:
                 #restart game
                 pass
-            if event.key == pygame.K_SPACE:
-                #start game
-                pass
+            if event.key == pygame.K_SPACE:                
+                space = True
+    if space:
+        redrawindow()        
 pygame.quit() 
