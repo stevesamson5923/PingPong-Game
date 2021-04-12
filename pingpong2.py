@@ -22,8 +22,18 @@ class Ball():
         self.dy = dy
         self.miss = False 
     def draw(self,win):
-        pygame.draw.circle(win,self.color,(self.x,self.y),self.radius)
+        self.ball = pygame.draw.circle(win,self.color,(self.x,self.y),self.radius)
     def update(self,hl,hr):
+        if self.ball.colliderect(hr.bar):
+            self.dx = -self.dx
+            hr.score = hr.score + 1
+            pygame.mixer.Sound.play(impactsound)
+        
+        if self.ball.colliderect(hl.bar):
+            self.dx = -self.dx
+            hl.score = hl.score + 1
+            pygame.mixer.Sound.play(impactsound)
+
         self.x = self.x + self.dx
         self.y = self.y + self.dy
 
@@ -52,23 +62,30 @@ class Bar():
         self.dir = dir
         self.score = 0
     def draw(self,win):
-        pygame.draw.rect(win,self.color,(self.x,self.y,self.width,self.height))
-    def update(self,dir):
-        pass
+        self.bar = pygame.draw.rect(win,self.color,(self.x,self.y,self.width,self.height))
+    def update(self,win,dir):
+        self.dir = dir
+        if self.dir < 0: 
+            self.y = self.y - self.dy
+        if self.dir > 0:
+            self.y = self.y + self.dy
+        self.draw(win)
 
-def redrawindow():
+def redrawindow(dl,dr):
     win.fill((0,0,0))
     ball.update(handleleft,handleright)
     ball.draw(win)
+    handleleft.update(win,dl)
+    handleright.update(win,dr)
     pygame.display.update()
 
 def initialize_game():
     global ball,handleleft,handleright
     win.fill((0,0,0))
-    ball = Ball(int(WIDTH/2),int(HEIGHT/2),20,(147,7,246),14,14)
+    ball = Ball(int(WIDTH/2),int(HEIGHT/2),20,(147,7,246),4,4)
     ball.draw(win)
-    handleleft = Bar(0,200,(40,222,60),20,200,10,3,0)
-    handleright = Bar(int(WIDTH-20),200,(100,28,60),20,200,10,3,0)
+    handleleft = Bar(0,200,(40,222,60),20,200,10,37,0)
+    handleright = Bar(int(WIDTH-20),200,(100,28,60),20,200,10,37,0)
     handleleft.draw(win)
     handleright.draw(win)
     pygame.display.update()
@@ -82,6 +99,8 @@ ctrl_but = pygame.transform.scale(pygame.image.load('controls.png'),(146,147))
 space = False
 play_start =False
 while run:
+    direction_l = 0
+    direction_r = 0
     if not play_start:
         win.fill((0,0,0)) 
         win.blit(front_img,(180,50))
@@ -106,23 +125,21 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 #move the left bar up
-                print('W pressed')
-                pass
+                direction_l = -1
             if event.key == pygame.K_s:
                 #move the left bar down
-                print('S pressed')
-                pass
+                direction_l = 1
             if event.key == pygame.K_UP:
                 #move the right bar up
-                pass
+                direction_r = -1
             if event.key == pygame.K_DOWN:
                 #move the right bar up
-                pass
+                direction_r = 1
             if event.key == pygame.K_r:
                 #restart game
                 pass
             if event.key == pygame.K_SPACE:                
                 space = True
     if space:
-        redrawindow()        
+        redrawindow(direction_l,direction_r)        
 pygame.quit() 
