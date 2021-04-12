@@ -21,3 +21,37 @@ ctrl_but = pygame.transform.scale(pygame.image.load('controls.png'),(146,147))
 while run:
     win.fill((0,0,0)) 
     win.blit(front_img,(180,50))
+    win.blit(play_but,(180,270))
+    win.blit(score_but,(330,270))
+    win.blit(ctrl_but,(480,270))
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+           run = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                print('left button pressed')
+                pass
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                #move the left bar up
+                print('W pressed')
+                pass
+            if event.key == pygame.K_s:
+                #move the left bar down
+                print('S pressed')
+                pass
+            if event.key == pygame.K_UP:
+                #move the right bar up
+                pass
+            if event.key == pygame.K_DOWN:
+                #move the right bar up
+                pass
+            if event.key == pygame.K_r:
+                #restart game
+                pass
+            if event.key == pygame.K_SPACE:
+                #start game
+                pass
+pygame.quit() 
