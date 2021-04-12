@@ -12,6 +12,39 @@ impactsound = pygame.mixer.Sound('imp.wav')
 music = pygame.mixer.music.load('bgmusic.mp3')
 pygame.mixer.music.set_volume(0.3)
 
+class Ball():
+    def __init__(self,x,y,radius,color,dx,dy):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.color = color
+        self.dx = dx
+        self.dy = dy
+        self.miss = False 
+    def draw(self,win):
+        pygame.draw.circle(win,self.color,(self.x,self.y),self.radius)
+    def update(self):
+        self.x = self.x + self.dx
+        self.y = self.y + self.dy
+
+class Bar():
+    def __init__(self,x,y,color,width,height,dx,dy,dir):
+        self.x = x
+        self.y = y
+        self.color = color
+        self.width = width
+        self.height = height
+        self.dx = dx
+        self.dy = dy
+        self.dir = dir
+        self.score = 0
+    def draw(self,win):
+        pygame.draw.rect(win,self.color,(self.x,self.y,self.width,self.height))
+    def update(self,dir):
+        pass
+
+ball = Ball(int(WIDTH/2),int(HEIGHT/2),20,(147,7,246),4,4)
+
 run = True
 front_img = pygame.transform.scale(pygame.image.load('front.png'),(500,200))
 play_but = pygame.transform.scale(pygame.image.load('play.png'),(146,147))
