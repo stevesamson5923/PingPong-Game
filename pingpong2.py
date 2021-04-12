@@ -23,11 +23,23 @@ class Ball():
         self.miss = False 
     def draw(self,win):
         pygame.draw.circle(win,self.color,(self.x,self.y),self.radius)
-    def update(self):
+    def update(self,hl,hr):
         self.x = self.x + self.dx
         self.y = self.y + self.dy
-        
 
+        if (self.y+self.radius>=HEIGHT or self.y <=0):
+            self.dy = -self.dy
+        #if (self.x+self.radius>=WIDTH or self.x<= 0):
+        #    self.dx = -self.dx
+        if self.x > WIDTH:
+            self.miss = True
+            hr.score = hr.score - 1
+            pygame.mixer.music.stop()
+        if self.x < 0:
+            self.miss = True
+            hl.score = hl.score - 1
+            pygame.mixer.music.stop()
+        
 class Bar():
     def __init__(self,x,y,color,width,height,dx,dy,dir):
         self.x = x
@@ -46,7 +58,7 @@ class Bar():
 
 def redrawindow():
     win.fill((0,0,0))
-    ball.update()
+    ball.update(handleleft,handleright)
     ball.draw(win)
     pygame.display.update()
 
