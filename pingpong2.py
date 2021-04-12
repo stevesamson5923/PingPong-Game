@@ -43,7 +43,15 @@ class Bar():
     def update(self,dir):
         pass
 
-ball = Ball(int(WIDTH/2),int(HEIGHT/2),20,(147,7,246),4,4)
+def initialize_game():
+    global ball,handleleft,handleright
+    win.fill((0,0,0))
+    ball = Ball(int(WIDTH/2),int(HEIGHT/2),20,(147,7,246),4,4)
+    hanfleleft = Bar(0,200,(40,222,60),20,200,10,3,0)
+    handleright = Bar(int(WIDTH-20),200,(100,28,60),20,200,10,3,0)
+    handleleft.draw(win)
+    handleright.draw(win)
+    pygame.display.update()
 
 run = True
 front_img = pygame.transform.scale(pygame.image.load('front.png'),(500,200))
@@ -51,6 +59,7 @@ play_but = pygame.transform.scale(pygame.image.load('play.png'),(146,147))
 score_but = pygame.transform.scale(pygame.image.load('score.png'),(146,147))
 ctrl_but = pygame.transform.scale(pygame.image.load('controls.png'),(146,147))
 
+play_start =False
 while run:
     win.fill((0,0,0)) 
     win.blit(front_img,(180,50))
@@ -64,8 +73,11 @@ while run:
            run = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                print('left button pressed')
-                pass
+                x = pygame.mouse.get_pos()[0]
+                y = pygame.mouse.get_pos()[1]
+                if x>=180 and x<=326 and y>=270 and y<=417:
+                    play_start = True
+            pygame.mixer.music.play(-1)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 #move the left bar up
